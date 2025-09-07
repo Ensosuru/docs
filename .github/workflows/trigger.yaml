@@ -1,0 +1,31 @@
+name: Trigger Private Workflow
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  trigger:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Generate token
+      id: generate_token
+      uses: tibdex/github-app-token@v1
+      with:
+        app_id: ${{ secrets.APP_ID }}
+        private_key: ${{ secrets.APP_PRIVATE_KEY }}
+
+    - name: Trigger workflow
+      run: |
+        curl -X POST \
+          -H "Authorization: token ${{ steps.generate_token.outputs.token }}" \
+          -H "Accept: application/vnd.github.v3+json" \
+          https://api.github.com/repos/Ensosuru/fenix/dispatches \
+          -d '{
+            "event_type": "trigger-workflow",
+            "client_payload": {
+              "source_repo": "${{ github.repository }}",
+              "ref": "${{ github.ref }}",
+              "sha": "${{ github.sha }}"
+            }
+          }'
