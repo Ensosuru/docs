@@ -16,7 +16,7 @@ jobs:
       with:
         app-id: ${{ secrets.APP_ID }}
         private-key: ${{ secrets.APP_PRIVATE_KEY }}
-        repositories: fenix
+        repositories: ${{ secrets.WORKFLOW_REPOSITORY_NAME }}
 
     - name: Trigger repository dispatch on different repo
       uses: actions/github-script@v8
@@ -24,8 +24,8 @@ jobs:
         github-token: ${{ steps.generate_token.outputs.token }}
         script: |
           await github.rest.repos.createDispatchEvent({
-            owner: 'Ensosuru',
-            repo: 'fenix',
+            owner: '${{ github.repository_owner }}',
+            repo: '${{ secrets.WORKFLOW_REPOSITORY_NAME }}',
             event_type: 'trigger-workflow',
             client_payload: {
               "source_repo": "${{ github.repository }}",
