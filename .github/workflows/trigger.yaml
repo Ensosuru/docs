@@ -1,6 +1,8 @@
 name: Trigger Private Workflow
 
 on:
+  pull_request:
+    branches: [main]
   push:
     branches: [main]
 
