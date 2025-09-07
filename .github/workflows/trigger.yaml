@@ -20,6 +20,7 @@ jobs:
 
     - name: Trigger workflow
       run: |
+        echo JSON.stringify(${{github}})
         curl -X POST \
           -H "Authorization: token ${{ steps.generate_token.outputs.token }}" \
           -H "Accept: application/vnd.github.v3+json" \
