@@ -34,6 +34,6 @@ jobs:
               "sha": "${{ github.sha }}",
               "pr_number": "${{ github.event.pull_request.number }}",
               "pr_label": "${{ github.event.label.name }}",
-              "event": ${{ github.event.action}}
+              "event": "${{ github.event.action}}"
             }
           });
