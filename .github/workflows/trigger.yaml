@@ -3,7 +3,7 @@ name: Trigger Private Workflow
 on:
   pull_request:
     branches: [main]
-    types: [opened, synchronize, reopened, labeled]
+    types: [opened, synchronize, reopened, closed, labeled]
   push:
     branches: [main]
 
@@ -32,8 +32,8 @@ jobs:
               "source_repo": "${{ github.repository }}",
               "ref": "${{ github.ref }}",
               "sha": "${{ github.sha }}",
-              "other": "other",
               "pr_number": "${{ github.event.pull_request.number }}",
-              "pr_label": "${{ github.event.label.name }}"
+              "pr_label": "${{ github.event.label.name }}",
+              "event": ${{ github.event.action}}
             }
           });
