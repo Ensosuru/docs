@@ -11,18 +11,32 @@ jobs:
   trigger:
     runs-on: ubuntu-latest
     steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Setup Dotnet
+      uses: actions/setup-dotnet@3e891b0cb619bf60e2c25674b222b8940e2c1c25
+      with:
+        dotnet-version: |-
+          9.0.203
+
+    - name: build
+      run: dotnet build src/docs.sln
+
     - name: Cache Playwright browsers
       uses: actions/cache@v4
       id: playwright-cache
       with:
         path: ~/.cache/ms-playwright
-        key: playwright-${{ runner.os }}-${{ hashFiles('test/Hosts.Tests/bin/Debug/net9.0/playwright.ps1') }}
+        key: playwright-${{ runner.os }}-${{ hashFiles('src/docs/bin/Debug/net9.0/playwright.ps1') }}
         restore-keys: |
           playwright-${{ runner.os }}-
 
     - name: Install Playwright
       if: steps.playwright-cache.outputs.cache-hit != 'true'
-      run: pwsh test/Hosts.Tests/bin/Debug/net9.0/playwright.ps1 install --with-deps
+      run: pwsh src/docs/bin/Debug/net9.0/playwright.ps1 install --with-deps
 
     - name: Generate token
       id: generate_token
