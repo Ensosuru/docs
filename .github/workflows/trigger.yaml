@@ -11,6 +11,19 @@ jobs:
   trigger:
     runs-on: ubuntu-latest
     steps:
+    - name: Cache Playwright browsers
+      uses: actions/cache@v4
+      id: playwright-cache
+      with:
+        path: ~/.cache/ms-playwright
+        key: playwright-${{ runner.os }}-${{ hashFiles('test/Hosts.Tests/bin/Debug/net9.0/playwright.ps1') }}
+        restore-keys: |
+          playwright-${{ runner.os }}-
+
+    - name: Install Playwright
+      if: steps.playwright-cache.outputs.cache-hit != 'true'
+      run: pwsh test/Hosts.Tests/bin/Debug/net9.0/playwright.ps1 install --with-deps
+
     - name: Generate token
       id: generate_token
       uses: actions/create-github-app-token@v2
